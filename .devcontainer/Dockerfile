@@ -1,10 +1,6 @@
-ARG DEVCONTAINER_BUILD_CERT_STATUS
+FROM 658387908230.dkr.ecr.us-east-1.amazonaws.com/dkw-dsml-image:latest
 
-FROM 658387908230.dkr.ecr.us-east-1.amazonaws.com/dkw-dsml-image:latest as base_no_cert
-ONBUILD LABEL noop=noop
-
-FROM 658387908230.dkr.ecr.us-east-1.amazonaws.com/dkw-dsml-image:latest as base_with_cert
-ONBUILD USER root
-ONBUILD COPY ./node_extra_cert.crt /usr/local/share/ca-certificates
-ONBUILD RUN update-ca-certificates
-ONBUILD ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/node_extra_cert.crt
+USER vscode
+WORKDIR "/home/vscode"
+COPY ./cubes.yml cubes.yml
+RUN ["/bin/bash", "-ci", "conda env create -f cubes.yml; conda activate cubes"]
