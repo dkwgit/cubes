@@ -1,0 +1,49 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+	"name": "Cubes",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "658387908230.dkr.ecr.us-east-1.amazonaws.com/dkw-dsml-image:latest",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "pip3 install --user -r requirements.txt",
+
+	"mounts": [
+    "source=${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind"
+	],
+
+	"customizations": {
+		"vscode": {
+			"settings": { 
+				"terminal.integrated.defaultProfile.linux": "pwsh",
+				"git.autofetch": true
+			},
+			"powershell.powerShellAdditionalExePaths": {
+				"Container Path" : "/opt/microsoft/powershell/7/pwsh"
+			},
+			"powershell.powerShellDefaultVersion": "Container Path",
+			"extensions": [
+				"amazonwebservices.aws-toolkit-vscode",
+				"mark-tucker.aws-cli-configure",
+				"ms-vscode.powershell",
+				"hashicorp.terraform",
+				"dbaeumer.vscode-eslint",
+				"ms-dotnettools.csharp",
+				"ms-python.python",
+				"ms-python.pylint"
+			]
+		}
+	},
+
+	"workspaceMount": "source=workspace-volume,target=/workspace,type=volume",
+	"workspaceFolder": "/workspace/cubes"
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
