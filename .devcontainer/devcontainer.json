@@ -3,7 +3,9 @@
 {
 	"name": "Cubes",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "658387908230.dkr.ecr.us-east-1.amazonaws.com/dkw-dsml-image:latest",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
