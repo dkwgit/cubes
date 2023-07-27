@@ -1,7 +1,7 @@
 import os
 import sys
 import math
-import cupy as np
+import numpy as np
 import argparse
 from time import perf_counter
 
