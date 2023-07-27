@@ -215,7 +215,7 @@ if __name__ == "__main__":
                     help='The number of cubes within each polycube')
     
     #Requires python >=3.9
-    parser.add_argument('--cache', action=argparse.BooleanOptionalAction)
+    parser.add_argument('--cache', action=argparse.BooleanOptionalAction, default=False)
 
     args = parser.parse_args()
    
