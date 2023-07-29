@@ -1,10 +1,10 @@
 import os
 import sys
 import math
-import asyncio
-import threading
 import numpy as np
 import argparse
+import concurrent.futures
+from multiprocessing import Pool
 from time import perf_counter
 
 def all_rotations(polycube):
@@ -96,7 +96,7 @@ def expand_cube(cube):
         new_cube[x,y,z] = 1
         yield crop_cube(new_cube)
 
-async def generate_polycubes(n, lock, use_cache=False, ):
+def generate_polycubes(n, use_cache=False):
     """
     Generates all polycubes of size n
   
@@ -130,24 +130,19 @@ async def generate_polycubes(n, lock, use_cache=False, ):
     polycubes = []
     polycubes_rle = set()
 
-    base_cubes = await generate_polycubes(n-1, lock, use_cache)
-    
-   
-    async def mainWork(polycubes, polycubes_rle, base_cube):
+    base_cubes = generate_polycubes(n-1, use_cache)
+
+    for idx, base_cube in enumerate(base_cubes):
         # Iterate over possible expansion positions
-        for new_cube in expand_cube(base_cube):
-            if not cube_exists_rle(new_cube, polycubes_rle):
-                polycubes.append(new_cube)
-                with lock:
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            for new_cube in expand_cube(base_cube):
+                if not cube_exists_rle(new_cube, polycubes_rle):
+                    polycubes.append(new_cube)
                     polycubes_rle.add(rle(new_cube))
-    tg  = asyncio.TaskGroup()
-    async with tg:
-        for base_cube in enumerate(base_cubes):
-            tg.create_task(mainWork(polycubes, polycubes_rle, base_cube))
-            
-        #if (idx % 100 == 0):               
-        #    perc = round((idx / len(base_cubes)) * 100,2)
-        #    print(f"\rGenerating polycubes n={n}: {perc}%", end="")
+
+        if (idx % 100 == 0):               
+            perc = round((idx / len(base_cubes)) * 100,2)
+            print(f"\rGenerating polycubes n={n}: {perc}%", end="")
 
     print(f"\rGenerating polycubes n={n}: 100%   ")
     
@@ -194,7 +189,7 @@ def rle(polycube):
 
     return tuple(r)
 
-def cube_exists_rle(polycube, polycubes_rle, lock):
+def cube_exists_rle(polycube, polycubes_rle):
     """
     Determines if a polycube has already been seen.
   
@@ -209,33 +204,31 @@ def cube_exists_rle(polycube, polycubes_rle, lock):
   
     """
     for cube_rotation in all_rotations(polycube):
-        with lock:
-            if rle(cube_rotation) in polycubes_rle:
-                return True
+        if rle(cube_rotation) in polycubes_rle:
+            return True
 
     return False
 
-async def main():
+def main():
     parser = argparse.ArgumentParser(
                     prog='Polycube Generator',
                     description='Generates all polycubes (combinations of cubes) of size n.')
 
     parser.add_argument('n', metavar='N', type=int,
-                    help='The number of cubes within each polycube', default=5)
+                    help='The number of cubes within each polycube')
     
     #Requires python >=3.9
     parser.add_argument('--cache', action=argparse.BooleanOptionalAction, default=False)
 
-    #args = parser.parse_args()
+    args = parser.parse_args()
    
-    n = 5
-    use_cache = False # args.cache if args.cache is not None else True
+    n = args.n
+    use_cache = args.cache if args.cache is not None else True
 
     # Start the timer
     t1_start = perf_counter()
 
-    result = await generate_polycubes(n, threading.Lock(), use_cache=use_cache)
-    all_cubes = list(result)
+    all_cubes = list(generate_polycubes(n, use_cache=use_cache))
 
     # Stop the timer
     t1_stop = perf_counter()
@@ -245,7 +238,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
 
 # Code for if you want to generate pictures of the sets of cubes. Will work up to about n=8, before there are simply too many!
 # Could be adapted for larger cube sizes by splitting the dataset up into separate images.

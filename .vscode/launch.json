@@ -8,10 +8,10 @@
       "name": "Python: Current File",
       "type": "python",
       "request": "launch",
-      "program": "cubes.py",
+      "program": "cubes_with_threads.py",
       "console": "integratedTerminal",
       "justMyCode": true,
-      "args": ["5"]
+      "args": ["--cache", "5"]
     }
   ]
 }
