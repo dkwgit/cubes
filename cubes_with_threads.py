@@ -131,14 +131,13 @@ def generate_polycubes(n, use_cache=False):
     polycubes_rle = set()
 
     base_cubes = generate_polycubes(n-1, use_cache)
-
+ 
     for idx, base_cube in enumerate(base_cubes):
         # Iterate over possible expansion positions
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            for new_cube in expand_cube(base_cube):
-                if not cube_exists_rle(new_cube, polycubes_rle):
-                    polycubes.append(new_cube)
-                    polycubes_rle.add(rle(new_cube))
+        for new_cube in expand_cube(base_cube):
+            if not cube_exists_rle(new_cube, polycubes_rle):
+                polycubes.append(new_cube)
+                polycubes_rle.add(rle(new_cube))
 
         if (idx % 100 == 0):               
             perc = round((idx / len(base_cubes)) * 100,2)
