@@ -118,7 +118,7 @@ def testZ270(tuple):
   for i in range(1, xDim * yDim * zDim + 1):
     x, y, z = origIndexMap[i]
     xNew, yNew, zNew = newIndexMap[i]
-    diff = (y - xNew, xDim - x- 1 - yNew, z - zNew)
+    diff = (y - xNew, xDim - x - 1 - yNew, z - zNew)
     print("testZ270", i, (x,y,z), (xNew, yNew, zNew), diff)
   print("\n")
   
