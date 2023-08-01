@@ -59,18 +59,18 @@ def testX270(tuple):
 def testY90(tuple):
   orig, origIndexMap = tuple
   xDim, yDim, zDim = np.shape(orig)
-  newArray, newIndexMap = rotateArray(orig, -1, (0,2))
+  newArray, newIndexMap = rotateArray(orig, 1, (0,2))
   for i in range(1, xDim * yDim * zDim + 1):
     x, y, z = origIndexMap[i]
     xNew, yNew, zNew = newIndexMap[i]
-    diff = (z - xNew, y - yNew, xDim - x - 1 - zNew)
+    diff = (zDim - z - 1 - xNew, y - yNew, x - zNew)
     print("testY90", i, (x,y,z), (xNew, yNew, zNew), diff)
   print("\n")
   
 def testY180(tuple):  
   orig, origIndexMap = tuple
   xDim, yDim, zDim = np.shape(orig)
-  newArray, newIndexMap = rotateArray(orig, -2, (0,2))
+  newArray, newIndexMap = rotateArray(orig, 2, (0,2))
   for i in range(1, xDim * yDim * zDim + 1):
     x, y, z = origIndexMap[i]
     xNew, yNew, zNew = newIndexMap[i]
@@ -81,29 +81,29 @@ def testY180(tuple):
 def testY270(tuple):  
   orig, origIndexMap = tuple
   xDim, yDim, zDim = np.shape(orig)
-  newArray, newIndexMap = rotateArray(orig, -3, (0,2))
+  newArray, newIndexMap = rotateArray(orig, 3, (0,2))
   for i in range(1, xDim * yDim * zDim + 1):
     x, y, z = origIndexMap[i]
     xNew, yNew, zNew = newIndexMap[i]
-    diff = (zDim - z - 1 - xNew, y - yNew, x - zNew)
+    diff = (z - xNew, y - yNew, xDim - x - 1 - zNew)
     print("testY270", i, (x,y,z), (xNew, yNew, zNew), diff)
   print("\n")
   
 def testZ90(tuple):
   orig, origIndexMap = tuple
   xDim, yDim, zDim = np.shape(orig)
-  newArray, newIndexMap = rotateArray(orig, -1, (0,1))
+  newArray, newIndexMap = rotateArray(orig, 1, (0,1))
   for i in range(1, xDim * yDim * zDim + 1):
     x, y, z = origIndexMap[i]
     xNew, yNew, zNew = newIndexMap[i]
-    diff = (y - xNew, xDim - x- 1 - yNew, z - zNew)
+    diff = (yDim - y - 1 - xNew, x - yNew, z - zNew)
     print("testZ90", i, (x,y,z), (xNew, yNew, zNew), diff)
   print("\n")
   
 def testZ180(tuple):  
   orig, origIndexMap = tuple
   xDim, yDim, zDim = np.shape(orig)
-  newArray, newIndexMap = rotateArray(orig, -2, (0,1))
+  newArray, newIndexMap = rotateArray(orig, 2, (0,1))
   for i in range(1, xDim * yDim * zDim + 1):
     x, y, z = origIndexMap[i]
     xNew, yNew, zNew = newIndexMap[i]
@@ -114,11 +114,11 @@ def testZ180(tuple):
 def testZ270(tuple):  
   orig, origIndexMap = tuple
   xDim, yDim, zDim = np.shape(orig)
-  newArray, newIndexMap = rotateArray(orig, -3, (0,1))
+  newArray, newIndexMap = rotateArray(orig, 3, (0,1))
   for i in range(1, xDim * yDim * zDim + 1):
     x, y, z = origIndexMap[i]
     xNew, yNew, zNew = newIndexMap[i]
-    diff = (yDim - y - 1 - xNew, x - yNew, z - zNew)
+    diff = (y - xNew, xDim - x- 1 - yNew, z - zNew)
     print("testZ270", i, (x,y,z), (xNew, yNew, zNew), diff)
   print("\n")
   
