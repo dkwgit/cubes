@@ -141,7 +141,7 @@ def generate_polycubes(n, use_cache=False):
             perc = round((idx / len(base_cubes)) * 100,2)
             print(f"\rGenerating polycubes n={n}: {perc}%", end="")
 
-    print(f"\rGenerating polycubes n={n}: 100%   ")
+    print(f"\rGenerating polycubes n={n}: 100%. combos: {len(polycubes)}")
     
     if use_cache:
         cache_path = f"cubes_{n}.npy"
